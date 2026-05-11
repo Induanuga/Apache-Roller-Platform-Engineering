@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  refactor-pipeline:
+    build: .
+    container_name: refactor-pipeline
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_OWNER=${GITHUB_OWNER}
+      - GITHUB_REPO=${GITHUB_REPO}
+    volumes:
+      - ./logs:/app/logs
+      - ./results:/app/results
+      - ./config.yaml:/app/config.yaml
+      - ./roller:/app/roller
+    restart: unless-stopped
+    
+  # Optional: Schedule with cron
+  scheduler:
+    image: mcuadros/ofelia:latest
+    container_name: scheduler
+    depends_on:
+      - refactor-pipeline
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-exec.refactor.schedule: "0 2 * * *"  # Daily at 2 AM
+      ofelia.job-exec.refactor.container: "refactor-pipeline"
+      ofelia.job-exec.refactor.command: "python3 refactor_pipeline.py"

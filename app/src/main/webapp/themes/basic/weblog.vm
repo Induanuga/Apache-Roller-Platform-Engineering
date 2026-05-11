@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src *; base-uri 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'">
+    <title>$model.weblog.name</title>
+    #showAutodiscoveryLinks($model.weblog)
+    #showAnalyticsTrackingCode($model.weblog)
+    <link rel="stylesheet" href="$model.weblog.stylesheet">
+    #showMetaDescription()
+</head>
+<!-- weblog -->
+<body>
+<script>
+function starItem(link, countId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", link.href, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.responseText === "login_required") {
+                window.location.href = "${url.absoluteSite}/roller-ui/login.rol";
+            } else {
+                document.getElementById(countId).innerHTML = xhr.responseText;
+            }
+        }
+    };
+    xhr.send();
+    return false;
+}
+</script>
+<div id="id_weblog" class="content_wrapper">
+  <div class="content">
+    <h1 class="weblogName">$model.weblog.name</h1>
+        <center>
+        #showWeblogCategoryLinksList()
+        </center>
+        ## show next/previous paging controls
+        #set($pager = $model.getWeblogEntriesPager()) 
+        <div class="next-previous">
+            #showNextPrevEntriesControl($pager)
+        </div>
+        ## show entries
+        #showWeblogEntriesPager($pager)
+  </div>
+</div>
+<div class="rightbar_wrapper">
+  <div class="rightbar">
+    #includeTemplate($model.weblog "sidebar")
+  </div>
+</div>
+## Translation script is now injected globally by TranslationInjectionFilter.
+## It covers all page types automatically — weblogs, search, admin, etc.
+## No manual script tag needed here; the filter inserts it before </body>
+## on every HTML response. Keeping it here would be harmless (the JS guards
+## against building the toolbar twice) but is unnecessary.
+</body>
+</html>

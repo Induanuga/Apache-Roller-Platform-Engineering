@@ -1,0 +1,30 @@
+{
+  "smell_id": "7b1eae4b8e40",
+  "original_file": "project-1-team-13/app/src/main/java/org/apache/roller/util/DateUtil.java",
+  "strategy": "Extract Class",
+  "improvements": {
+    "complexity_reduction": 0,
+    "loc_reduction": 0,
+    "complexity_percentage": 0.0
+  },
+  "metrics_before": {
+    "lines_of_code": 405,
+    "cyclomatic_complexity": 58,
+    "method_count": 60,
+    "class_count": 1,
+    "coupling_count": 24,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.10507880910683012,
+    "duplication_ratio": 0.0
+  },
+  "metrics_after": {
+    "lines_of_code": 405,
+    "cyclomatic_complexity": 58,
+    "method_count": 60,
+    "class_count": 1,
+    "coupling_count": 24,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.10664335664335664,
+    "duplication_ratio": 0.0
+  }
+}

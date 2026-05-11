@@ -1,0 +1,81 @@
+[2026-02-12 15:14:36] [INFO] 
+================================================================================
+   AUTOMATED REFACTORING PIPELINE - TASK 3C
+================================================================================
+   Repository: https://github.com/serc-courses/project-1-team-13.git
+   LLM: Gemini models/gemini-2.0-flash-exp
+   Timestamp: 2026-02-12 15:14:36
+   
+   Pipeline Configuration:
+   - Detection: ENABLED
+   - Refactoring: ENABLED
+   - PR Creation: ENABLED
+   - Max Smells to Refactor: 5
+   - Max Files to Analyze: 10
+================================================================================
+
+[2026-02-12 15:14:36] [INFO] 
+================================================================================
+[2026-02-12 15:14:36] [INFO] PHASE 1: REPOSITORY SETUP
+[2026-02-12 15:14:36] [INFO] ================================================================================
+[2026-02-12 15:14:36] [INFO] Cloning repository: https://github.com/serc-courses/project-1-team-13.git
+[2026-02-12 15:14:48] [SUCCESS] Repository cloned successfully
+[2026-02-12 15:14:48] [SUCCESS] ✓ Repository ready
+[2026-02-12 15:14:48] [INFO] 
+================================================================================
+[2026-02-12 15:14:48] [INFO] PHASE 2: DESIGN SMELL DETECTION
+[2026-02-12 15:14:48] [INFO] ================================================================================
+[2026-02-12 15:14:48] [INFO] Scanning repository: ./project-1-team-13
+[2026-02-12 15:14:48] [INFO] Found 1099 Java files
+[2026-02-12 15:14:48] [INFO] 
+[1/10] Analyzing: RollerException.java
+[2026-02-12 15:14:48] [INFO] Analyzing file: RollerException.java
+[2026-02-12 15:14:51] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:14:51] [INFO]   Detected 0 smells
+[2026-02-12 15:14:51] [INFO] 
+[2/10] Analyzing: ISO8601DateParser.java
+[2026-02-12 15:14:51] [INFO] Analyzing file: ISO8601DateParser.java
+[2026-02-12 15:14:54] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:14:54] [INFO]   Detected 0 smells
+[2026-02-12 15:14:54] [INFO] 
+[3/10] Analyzing: RollerConstants.java
+[2026-02-12 15:14:54] [INFO] Analyzing file: RollerConstants.java
+[2026-02-12 15:14:57] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:14:57] [INFO]   Detected 0 smells
+[2026-02-12 15:14:57] [INFO] 
+[4/10] Analyzing: PropertyExpander.java
+[2026-02-12 15:14:57] [INFO] Analyzing file: PropertyExpander.java
+[2026-02-12 15:15:00] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:15:00] [INFO]   Detected 0 smells
+[2026-02-12 15:15:00] [INFO] 
+[5/10] Analyzing: UUIDGenerator.java
+[2026-02-12 15:15:00] [INFO] Analyzing file: UUIDGenerator.java
+[2026-02-12 15:15:03] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:15:03] [INFO]   Detected 0 smells
+[2026-02-12 15:15:03] [INFO] 
+[6/10] Analyzing: DateUtil.java
+[2026-02-12 15:15:03] [INFO] Analyzing file: DateUtil.java
+[2026-02-12 15:15:03] [INFO]   Large file detected - using chunking strategy
+[2026-02-12 15:15:03] [INFO]   Analyzing chunk 1/2 (lines 1-500)
+[2026-02-12 15:15:06] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:15:06] [INFO]   Analyzing chunk 2/2 (lines 451-571)
+[2026-02-12 15:15:09] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:15:09] [INFO]   Detected 0 smells
+[2026-02-12 15:15:09] [INFO] 
+[7/10] Analyzing: RegexUtil.java
+[2026-02-12 15:15:09] [INFO] Analyzing file: RegexUtil.java
+[2026-02-12 15:15:12] [ERROR] LLM analysis failed: LLM generation failed after 3 attempts: Unknown field for GenerateContentRequest: request_options
+[2026-02-12 15:15:12] [INFO]   Detected 0 smells
+[2026-02-12 15:15:12] [INFO] 
+[8/10] Analyzing: Category.java
+[2026-02-12 15:15:12] [INFO] Analyzing file: Category.java
+[2026-02-12 15:15:13] [WARNING] 
+
+⚠️  Pipeline interrupted by user
+[2026-02-12 15:15:13] [INFO] 
+Partial results have been saved:
+[2026-02-12 15:15:13] [INFO]   - Smell reports: ./results
+[2026-02-12 15:15:13] [INFO]   - Logs: ./logs
+[2026-02-12 15:15:13] [INFO]   - Refactored code: ./refactored_code
+[2026-02-12 15:15:13] [INFO] 
+You can resume by running the pipeline again.

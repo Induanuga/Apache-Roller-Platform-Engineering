@@ -1,0 +1,159 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+title Apache Roller Lucene-based Search & Indexing Subsystem
+
+' =========================
+' Core Search Interfaces
+' =========================
+
+interface IndexManager {
+    + initialize() : void
+    + shutdown() : void
+    + addEntry(entry: WeblogEntry) : void
+    + updateEntry(entry: WeblogEntry) : void
+    + removeEntry(entry: WeblogEntry) : void
+    + rebuildWebsiteIndex(weblog: Weblog) : void
+    + removeWebsiteIndex(weblog: Weblog) : void
+    + search(query: String, weblog: Weblog) : List<SearchResult>
+}
+
+interface SearchManager {
+    + search(query: String, weblog: Weblog) : List<SearchResult>
+}
+
+' =========================
+' Lucene Implementations
+' =========================
+
+class LuceneIndexManager {
+    - directory: Directory
+    - analyzer: Analyzer
+    - indexWriter: IndexWriter
+    - documentBuilder: DocumentBuilder
+    + initialize() : void
+    + shutdown() : void
+    + addEntry(entry: WeblogEntry) : void
+    + updateEntry(entry: WeblogEntry) : void
+    + removeEntry(entry: WeblogEntry) : void
+    + rebuildWebsiteIndex(weblog: Weblog) : void
+    + removeWebsiteIndex(weblog: Weblog) : void
+    + search(query: String, weblog: Weblog) : List<SearchResult>
+}
+
+class LuceneSearchManager {
+    - directory: Directory
+    - analyzer: Analyzer
+    - queryParser: QueryParser
+    + search(query: String, weblog: Weblog) : List<SearchResult>
+}
+
+IndexManager <|.. LuceneIndexManager
+SearchManager <|.. LuceneSearchManager
+
+' =========================
+' Index Maintenance
+' =========================
+
+class IndexWriterManager {
+    - indexWriter: IndexWriter
+    + openWriter() : IndexWriter
+    + closeWriter() : void
+    + commit() : void
+}
+
+class IndexReaderManager {
+    - indexReader: IndexReader
+    + openReader() : IndexReader
+    + closeReader() : void
+}
+
+LuceneIndexManager *-- IndexWriterManager
+LuceneSearchManager *-- IndexReaderManager
+
+' =========================
+' Document Building
+' =========================
+
+abstract class DocumentBuilder {
+    + buildDocument(obj: Object) : Document
+}
+
+class WeblogEntryDocumentBuilder {
+    + buildDocument(entry: WeblogEntry) : Document
+}
+
+class CommentDocumentBuilder {
+    + buildDocument(comment: Comment) : Document
+}
+
+DocumentBuilder <|-- WeblogEntryDocumentBuilder
+DocumentBuilder <|-- CommentDocumentBuilder
+
+LuceneIndexManager o-- DocumentBuilder
+
+' =========================
+' Search Query Processing
+' =========================
+
+class QueryParser {
+    - analyzer: Analyzer
+    + parse(query: String) : Query
+}
+
+class SearchResult {
+    + title: String
+    + snippet: String
+    + url: String
+    + score: float
+}
+
+LuceneSearchManager --> QueryParser
+LuceneSearchManager --> SearchResult
+
+' =========================
+' Domain Objects (Indexed Content)
+' =========================
+
+class Weblog {
+    + id: String
+    + handle: String
+}
+
+class WeblogEntry {
+    + id: String
+    + title: String
+    + content: String
+    + pubTime: Date
+}
+
+class Comment {
+    + id: String
+    + content: String
+    + postTime: Date
+}
+
+LuceneIndexManager --> WeblogEntry
+LuceneIndexManager --> Comment
+LuceneSearchManager --> Weblog
+
+' =========================
+' Lucene Infrastructure
+' =========================
+
+class Analyzer
+class Directory
+class IndexWriter
+class IndexReader
+class Document
+class Query
+
+LuceneIndexManager --> Analyzer
+LuceneIndexManager --> Directory
+LuceneIndexManager --> IndexWriter
+LuceneSearchManager --> Analyzer
+LuceneSearchManager --> Directory
+IndexWriterManager --> IndexWriter
+IndexReaderManager --> IndexReader
+
+@enduml

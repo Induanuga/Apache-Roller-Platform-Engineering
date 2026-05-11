@@ -1,0 +1,128 @@
+# Automated Refactoring Pipeline Configuration
+
+repository:
+  # Don't use Apache Roller - use YOUR repository
+  url: "https://github.com/serc-courses/project-1-team-13.git"
+  local_path: "./project-1-team-13"  # Changed from "./roller"
+  branch: "main"  # or "master" - check your default branch
+  target_languages:
+    - java
+
+github:
+  owner: "serc-courses"      # Changed
+  repo: "project-1-team-13"  # Changed
+  base_branch: "main"        # or "master"
+  pr_labels:
+    - "automated-refactoring"
+    - "code-quality"
+  reviewers: []  # Leave empty or add your teammates
+  auto_merge: false
+
+api:
+  provider: "gemini"  # Changed from "anthropic"
+  model: "models/gemini-2.0-flash"  # Changed from "claude-sonnet-4-20250514"
+  max_tokens: 8000
+  temperature: 0.3
+  rate_limit:
+    requests_per_minute: 10
+    tokens_per_minute: 100000
+
+
+
+detection:
+  tools:
+    - name: "designite"
+      enabled: true
+      path: "java -jar DesigniteJava.jar"
+    - name: "checkstyle"
+      enabled: true
+      command: "mvn checkstyle:checkstyle"
+    - name: "pmd"
+      enabled: true
+      command: "mvn pmd:pmd"
+    - name: "spotbugs"
+      enabled: false
+      command: "mvn spotbugs:spotbugs"
+
+  thresholds:
+    cyclomatic_complexity:
+      high: 20
+      medium: 15
+      low: 10
+    lines_of_code:
+      high: 500
+      medium: 300
+      low: 200
+    lcom:
+      high: 0.3
+      medium: 0.5
+      low: 0.7
+    method_length:
+      high: 100
+      medium: 50
+      low: 30
+
+  smell_types:
+    - God Class
+    - Long Method
+    - Feature Envy
+    - Data Class
+    - Lazy Class
+    - Refused Bequest
+    - Shotgun Surgery
+    - Divergent Change
+
+refactoring:
+  max_smells_per_run: 5
+  priority_order:
+    - HIGH
+    - MEDIUM
+    - LOW
+  
+  validation:
+    compile: true
+    run_tests: true
+    check_coverage: false
+    min_coverage: 80
+  
+  rollback_on_failure: true
+  
+  patterns:
+    - Extract Method
+    - Extract Class
+    - Move Method
+    - Replace Conditional with Polymorphism
+    - Introduce Parameter Object
+
+chunking:
+  enabled: true
+  chunk_size: 800  # lines
+  overlap: 50      # lines
+  max_chunks: 20
+
+pr:
+  title_prefix: "[Automated]"
+  include_metrics: true
+  include_diff_stats: true
+  request_review: true
+  assign_to_author: false
+
+notifications:
+  slack:
+    enabled: false
+    webhook_url: "${SLACK_WEBHOOK}"
+    channel: "#code-quality"
+  email:
+    enabled: false
+    recipients:
+      - "team@example.com"
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "pipeline.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+scheduling:
+  enabled: true
+  cron: "0 2 * * *"  # Daily at 2 AM
+  timezone: "UTC"

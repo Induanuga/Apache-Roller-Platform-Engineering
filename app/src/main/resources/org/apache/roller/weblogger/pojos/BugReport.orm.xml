@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+    <package>org.apache.roller.weblogger.pojos</package>
+    <entity metadata-complete="true" name="BugReport" class="org.apache.roller.weblogger.pojos.BugReport"
+            access="PROPERTY">
+        <table name="bug_report"/>
+
+        <named-query name="BugReport.getAll">
+            <query>SELECT b FROM BugReport b ORDER BY b.submittedDate DESC</query>
+        </named-query>
+        <named-query name="BugReport.getByUser">
+            <query>SELECT b FROM BugReport b WHERE b.submittedBy = ?1 ORDER BY b.submittedDate DESC</query>
+        </named-query>
+
+        <attributes>
+            <id name="id">
+                <column name="id" length="48"/>
+            </id>
+            <basic name="title">
+                <column name="title" nullable="false" length="255"/>
+            </basic>
+            <basic name="description">
+                <column name="description" nullable="false"/>
+            </basic>
+            <basic name="pageUrl">
+                <column name="page_url" length="255"/>
+            </basic>
+            <basic name="bugType">
+                <column name="bug_type" nullable="false" length="48"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="status">
+                <column name="status" nullable="false" length="20"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="submittedBy">
+                <column name="submitted_by" nullable="false" length="255"/>
+            </basic>
+            <basic name="submitterEmail">
+                <column name="submitter_email" nullable="false" length="255"/>
+            </basic>
+            <basic name="submittedDate">
+                <column name="submitted_date" nullable="false"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="resolvedDate">
+                <column name="resolved_date"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="adminNotes">
+                <column name="admin_notes" length="1000"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

@@ -1,0 +1,30 @@
+{
+  "smell_id": "5cb2a9b39bcd",
+  "original_file": "project-1-team-13/app/src/main/java/org/apache/roller/RollerException.java",
+  "strategy": "Extract Method",
+  "improvements": {
+    "complexity_reduction": 0,
+    "loc_reduction": 0,
+    "complexity_percentage": 0.0
+  },
+  "metrics_before": {
+    "lines_of_code": 116,
+    "cyclomatic_complexity": 22,
+    "method_count": 11,
+    "class_count": 1,
+    "coupling_count": 2,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.07801418439716312,
+    "duplication_ratio": 0.0
+  },
+  "metrics_after": {
+    "lines_of_code": 116,
+    "cyclomatic_complexity": 22,
+    "method_count": 11,
+    "class_count": 1,
+    "coupling_count": 2,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.08450704225352113,
+    "duplication_ratio": 0.0
+  }
+}

@@ -1,0 +1,47 @@
+# anthropic==0.25.0
+# OR openai==1.10.0
+# OR google-generativeai==0.3.0
+google-generativeai==0.3.2
+requests==2.31.0
+PyGithub==2.1.1
+GitPython==3.1.40
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Static analysis tools
+lizard==1.17.10
+radon==6.0.1
+pylint==3.0.3
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+
+# Utilities
+click==8.1.7
+rich==13.7.0
+loguru==0.7.2
+
+# OpenAI API
+openai>=1.0.0
+
+# Token counting
+tiktoken>=0.5.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Optional: For better CLI output
+colorama>=0.4.6
+rich>=13.0.0
+
+# GitHub PR creation (already present but ensure version)
+PyGithub>=2.1.1
+
+# Git operations (already present)
+GitPython>=3.1.40
+

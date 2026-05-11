@@ -1,0 +1,87 @@
+[2026-02-12 04:21:08] [INFO] 
+================================================================================
+   AUTOMATED REFACTORING PIPELINE - TASK 3C
+================================================================================
+   Repository: https://github.com/serc-courses/project-1-team-13.git
+   LLM: Gemini models/gemini-2.0-flash-exp
+   Timestamp: 2026-02-12 04:21:08
+   
+   Pipeline Configuration:
+   - Detection: ENABLED
+   - Refactoring: ENABLED
+   - PR Creation: ENABLED
+   - Max Smells to Refactor: 5
+   - Max Files to Analyze: 10
+================================================================================
+
+[2026-02-12 04:21:08] [INFO] 
+================================================================================
+[2026-02-12 04:21:08] [INFO] PHASE 1: REPOSITORY SETUP
+[2026-02-12 04:21:08] [INFO] ================================================================================
+[2026-02-12 04:21:08] [INFO] Repository exists, pulling latest changes
+[2026-02-12 04:21:11] [SUCCESS] Repository ready
+[2026-02-12 04:21:11] [SUCCESS] ✓ Repository ready
+[2026-02-12 04:21:11] [INFO] 
+================================================================================
+[2026-02-12 04:21:11] [INFO] PHASE 2: DESIGN SMELL DETECTION
+[2026-02-12 04:21:11] [INFO] ================================================================================
+[2026-02-12 04:21:11] [INFO] Scanning repository: ./project-1-team-13
+[2026-02-12 04:21:11] [INFO] Found 1099 Java files
+[2026-02-12 04:21:11] [INFO] 
+[1/10] Analyzing: RollerException.java
+[2026-02-12 04:21:11] [INFO] Analyzing file: RollerException.java
+[2026-02-12 04:21:12] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:12] [INFO]   Detected 0 smells
+[2026-02-12 04:21:12] [INFO] 
+[2/10] Analyzing: ISO8601DateParser.java
+[2026-02-12 04:21:12] [INFO] Analyzing file: ISO8601DateParser.java
+[2026-02-12 04:21:12] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:12] [INFO]   Detected 0 smells
+[2026-02-12 04:21:12] [INFO] 
+[3/10] Analyzing: RollerConstants.java
+[2026-02-12 04:21:12] [INFO] Analyzing file: RollerConstants.java
+[2026-02-12 04:21:12] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:12] [INFO]   Detected 0 smells
+[2026-02-12 04:21:12] [INFO] 
+[4/10] Analyzing: PropertyExpander.java
+[2026-02-12 04:21:12] [INFO] Analyzing file: PropertyExpander.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[5/10] Analyzing: UUIDGenerator.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: UUIDGenerator.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[6/10] Analyzing: DateUtil.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: DateUtil.java
+[2026-02-12 04:21:13] [INFO]   Large file detected - using chunking strategy
+[2026-02-12 04:21:13] [INFO]   Analyzing chunk 1/2 (lines 1-500)
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Analyzing chunk 2/2 (lines 451-571)
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[7/10] Analyzing: RegexUtil.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: RegexUtil.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[8/10] Analyzing: Category.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: Category.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[9/10] Analyzing: Subscription.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: Subscription.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [INFO] 
+[10/10] Analyzing: Planet.java
+[2026-02-12 04:21:13] [INFO] Analyzing file: Planet.java
+[2026-02-12 04:21:13] [ERROR] LLM analysis failed: LLM generation failed: 404 models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2026-02-12 04:21:13] [INFO]   Detected 0 smells
+[2026-02-12 04:21:13] [SUCCESS] Smell report saved: ./results/smell_detection_report.json
+[2026-02-12 04:21:13] [SUCCESS] 
+✓ Detection complete: 0 smells found
+[2026-02-12 04:21:13] [INFO] No design smells detected. Pipeline complete.

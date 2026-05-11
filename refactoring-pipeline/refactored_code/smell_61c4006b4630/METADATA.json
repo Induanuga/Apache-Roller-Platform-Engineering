@@ -1,0 +1,30 @@
+{
+  "smell_id": "61c4006b4630",
+  "original_file": "project-1-team-13/app/src/main/java/org/apache/roller/util/RollerConstants.java",
+  "strategy": "Extract Class",
+  "improvements": {
+    "complexity_reduction": 0,
+    "loc_reduction": 0,
+    "complexity_percentage": 0.0
+  },
+  "metrics_before": {
+    "lines_of_code": 37,
+    "cyclomatic_complexity": 3,
+    "method_count": 16,
+    "class_count": 1,
+    "coupling_count": 0,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.0425531914893617,
+    "duplication_ratio": 0.0
+  },
+  "metrics_after": {
+    "lines_of_code": 37,
+    "cyclomatic_complexity": 3,
+    "method_count": 16,
+    "class_count": 1,
+    "coupling_count": 0,
+    "cohesion_score": 0.0,
+    "comment_ratio": 0.0625,
+    "duplication_ratio": 0.0
+  }
+}

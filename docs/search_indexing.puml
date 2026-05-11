@@ -1,0 +1,699 @@
+
+
+@startuml Lucene_Search_Indexing
+
+' Styling
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam class {
+    BackgroundColor #F8F8F8
+    BorderColor #333333
+    ArrowColor #333333
+}
+
+' ====================================
+' INTERFACES
+' ====================================
+
+interface IndexManager <<interface>> {
+    +void initialize()
+    +void rebuildWeblogIndex()
+    +void rebuildWeblogIndex(Weblog website)
+    +void removeWeblogIndex(Weblog website)
+    +void addEntryIndexOperation(WeblogEntry entry)
+    +void addEntryReIndexOperation(WeblogEntry entry)
+    +void removeEntryIndexOperation(WeblogEntry entry)
+    +SearchResultList search(String term, String weblogHandle, String category, String locale, int pageNum, int entryCount, URLStrategy urlStrategy)
+    +boolean isInconsistentAtStartup()
+    +void release()
+    +void shutdown()
+}
+
+interface Runnable <<interface>> {
+    +void run()
+}
+
+' ====================================
+' MAIN MANAGER CLASS
+' ====================================
+
+class LuceneIndexManager {
+    -IndexReader reader
+    -Weblogger roller
+    -boolean searchEnabled
+    -String indexDir
+    -File indexConsistencyMarker
+    -boolean inconsistentAtStartup
+    -ReadWriteLock rwl
+    -{static} Log logger
+    
+    #LuceneIndexManager(Weblogger roller)
+    +void initialize()
+    +void rebuildWeblogIndex()
+    +void rebuildWeblogIndex(Weblog website)
+    +void removeWeblogIndex(Weblog website)
+    +void addEntryIndexOperation(WeblogEntry entry)
+    +void addEntryReIndexOperation(WeblogEntry entry)
+    +void removeEntryIndexOperation(WeblogEntry entry)
+    +SearchResultList search(String term, String weblogHandle, String category, String locale, int pageNum, int entryCount, URLStrategy urlStrategy)
+    +ReadWriteLock getReadWriteLock()
+    +boolean isInconsistentAtStartup()
+    +{static} Analyzer getAnalyzer()
+    +void release()
+    +void shutdown()
+    +synchronized void resetSharedReader()
+    +synchronized IndexReader getSharedIndexReader()
+    +Directory getIndexDirectory()
+    -void scheduleIndexOperation(IndexOperation op)
+    -void executeIndexOperationNow(IndexOperation op)
+    -boolean indexExists()
+    -void deleteIndex()
+    -void createIndex(Directory dir)
+    -{static} Analyzer instantiateAnalyzer()
+    -{static} Analyzer instantiateDefaultAnalyzer()
+    -{static} SearchResultList convertHitsToEntryList(ScoreDoc[] hits, SearchOperation search, int pageNum, int entryCount, String weblogHandle, boolean websiteSpecificSearch, URLStrategy urlStrategy)
+}
+
+' ====================================
+' ABSTRACT BASE CLASSES
+' ====================================
+
+abstract class IndexOperation {
+    #{static} Log logger
+    #LuceneIndexManager manager
+    -IndexWriter writer
+    
+    +IndexOperation(LuceneIndexManager manager)
+    +void run()
+    #Document getDocument(WeblogEntry data)
+    #IndexWriter beginWriting()
+    #void endWriting()
+    #{abstract} void doRun()
+}
+
+abstract class ReadFromIndexOperation {
+    -{static} Log logger
+    
+    +ReadFromIndexOperation(LuceneIndexManager mgr)
+    +final void run()
+}
+'
+abstract class WriteToIndexOperation {
+    -{static} Log logger
+    
+    +WriteToIndexOperation(LuceneIndexManager mgr)
+    +void run()
+}
+
+' ====================================
+' CONCRETE WRITE OPERATIONS
+' ====================================
+
+class AddEntryOperation {
+    -{static} Log logger
+    -WeblogEntry data
+    -Weblogger roller
+    
+    +AddEntryOperation(Weblogger roller, LuceneIndexManager mgr, WeblogEntry data)
+    +void doRun()
+}
+
+class ReIndexEntryOperation {
+    -{static} Log logger
+    -WeblogEntry data
+    -Weblogger roller
+    
+    +ReIndexEntryOperation(Weblogger roller, LuceneIndexManager mgr, WeblogEntry data)
+    +void doRun()
+}
+
+class RemoveEntryOperation {
+    -{static} Log logger
+    -WeblogEntry data
+    -Weblogger roller
+    
+    +RemoveEntryOperation(Weblogger roller, LuceneIndexManager mgr, WeblogEntry data)
+    +void doRun()
+}
+
+class RebuildWebsiteIndexOperation {
+    -{static} Log logger
+    -Weblog website
+    -Weblogger roller
+    
+    +RebuildWebsiteIndexOperation(Weblogger roller, LuceneIndexManager mgr, Weblog website)
+    +void doRun()
+}
+
+class RemoveWebsiteIndexOperation {
+    -{static} Log logger
+    -Weblog website
+    -Weblogger roller
+    
+    +RemoveWebsiteIndexOperation(Weblogger roller, LuceneIndexManager mgr, Weblog website)
+    +void doRun()
+}
+
+' ====================================
+' CONCRETE READ OPERATIONS
+' ====================================
+
+class SearchOperation {
+    -{static} Log logger
+    -{static} String[] SEARCH_FIELDS
+    -{static} Sort SORTER
+    -IndexSearcher searcher
+    -TopFieldDocs searchresults
+    -String term
+    -String weblogHandle
+    -String category
+    -String locale
+    -String parseError
+    
+    +SearchOperation(IndexManager mgr)
+    +void setTerm(String term)
+    +void setWeblogHandle(String weblogHandle)
+    +void setCategory(String category)
+    +void setLocale(String locale)
+    +void doRun()
+    +IndexSearcher getSearcher()
+    +void setSearcher(IndexSearcher searcher)
+    +TopFieldDocs getResults()
+    +int getResultsCount()
+    +String getParseError()
+}
+
+' ====================================
+' UTILITY CLASSES
+' ====================================
+
+class IndexUtil {
+    -IndexUtil()
+    +{static} Term getTerm(String field, String input)
+}
+
+class FieldConstants {
+    +{static} final String ANCHOR
+    +{static} final String UPDATED
+    +{static} final String ID
+    +{static} final String USERNAME
+    +{static} final String CATEGORY
+    +{static} final String TITLE
+    +{static} final String PUBLISHED
+    +{static} final String CONTENT
+    +{static} final String CONTENT_STORED
+    +{static} final String C_CONTENT
+    +{static} final String C_EMAIL
+    +{static} final String C_NAME
+    +{static} final String CONSTANT
+    +{static} final String CONSTANT_V
+    +{static} final String WEBSITE_HANDLE
+    +{static} final String LOCALE
+}
+
+' ====================================
+' EXTERNAL DOMAIN CLASSES (SIMPLIFIED)
+' ====================================
+
+class Weblogger <<external>> {
+    +WeblogEntryManager getWeblogEntryManager()
+    +WeblogManager getWeblogManager()
+    +ThreadManager getThreadManager()
+    +void release()
+}
+
+class WeblogEntry <<external>> {
+    +String getId()
+    +String getTitle()
+    +String getText()
+    +Weblog getWebsite()
+    +User getCreator()
+    +WeblogCategory getCategory()
+    +List<WeblogEntryComment> getComments()
+    +Timestamp getPubTime()
+    +Timestamp getUpdateTime()
+    +String getLocale()
+}
+
+class Weblog <<external>> {
+    +String getId()
+    +String getHandle()
+    +String getName()
+}
+
+class WeblogEntryComment <<external>> {
+    +String getContent()
+    +String getEmail()
+    +String getName()
+}
+
+class WeblogCategory <<external>> {
+    +String getName()
+}
+
+class User <<external>> {
+    +String getUserName()
+}
+
+class WeblogEntryManager <<external>> {
+    +WeblogEntry getWeblogEntry(String id)
+    +List<WeblogEntry> getWeblogEntries(WeblogEntrySearchCriteria criteria)
+}
+
+class WeblogManager <<external>> {
+    +Weblog getWeblog(String id)
+}
+
+class ThreadManager <<external>> {
+    +void executeInBackground(Runnable task)
+    +void executeInForeground(Runnable task)
+}
+
+class URLStrategy <<external>> {
+}
+
+class SearchResultList <<external>> {
+    +SearchResultList(List results, Set categories, int limit, int offset)
+}
+
+class WeblogEntryWrapper <<external>> {
+    +{static} WeblogEntryWrapper wrap(WeblogEntry entry, URLStrategy strategy)
+}
+
+class WeblogEntrySearchCriteria <<external>> {
+    +void setWeblog(Weblog weblog)
+    +void setStatus(PubStatus status)
+}
+
+class WebloggerConfig <<external>> {
+    +{static} String getProperty(String key)
+    +{static} boolean getBooleanProperty(String key, boolean defaultValue)
+    +{static} int getIntProperty(String key)
+}
+
+class WebloggerRuntimeConfig <<external>> {
+    +{static} boolean isSiteWideWeblog(String handle)
+}
+
+class WebloggerException <<external>> {
+}
+
+class InitializationException <<external>> {
+}
+enum PubStatus <<external>> {
+    PUBLISHED
+}
+
+class RollerConstants <<external>> {
+    +{static} final long SEC_IN_MS
+}
+
+' ====================================
+' LUCENE LIBRARY CLASSES
+' ====================================
+
+class IndexWriter <<Lucene>> {
+    +void addDocument(Document doc)
+    +void deleteDocuments(Term term)
+    +void close()
+}
+
+class IndexReader <<Lucene>> {
+    +{static} DirectoryReader open(Directory dir)
+    +void close()
+}
+
+class DirectoryReader <<Lucene>> {
+    +{static} DirectoryReader open(Directory dir)
+    +{static} boolean indexExists(Directory dir)
+}
+
+class IndexSearcher <<Lucene>> {
+    +IndexSearcher(IndexReader reader)
+    +TopFieldDocs search(Query query, int n, Sort sort)
+    +Document doc(int docID)
+}
+
+class Document <<Lucene>> {
+    +void add(Field field)
+    +Field getField(String name)
+}
+
+class Field <<Lucene>> {
+}
+
+class StringField <<Lucene>> {
+    +StringField(String name, String value, Store store)
+}
+
+class TextField <<Lucene>> {
+    +TextField(String name, String value, Store store)
+}
+
+class SortedDocValuesField <<Lucene>> {
+    +SortedDocValuesField(String name, BytesRef value)
+}
+
+class Term <<Lucene>> {
+    +Term(String field, String text)
+}
+
+class Query <<Lucene>> {
+}
+
+class TermQuery <<Lucene>> {
+    +TermQuery(Term term)
+}
+
+class BooleanQuery <<Lucene>> {
+}
+
+class BooleanQueryBuilder <<Lucene>> {
+    +BooleanQuery.Builder add(Query query, BooleanClause.Occur occur)
+    +BooleanQuery build()
+}
+
+class MultiFieldQueryParser <<Lucene>> {
+    +MultiFieldQueryParser(String[] fields, Analyzer analyzer)
+    +void setDefaultOperator(Operator op)
+    +Query parse(String query)
+}
+
+class Analyzer <<Lucene>> {
+    +TokenStream tokenStream(String field, Reader reader)
+}
+
+class StandardAnalyzer <<Lucene>> {
+    +StandardAnalyzer()
+}
+
+class LimitTokenCountAnalyzer <<Lucene>> {
+    +LimitTokenCountAnalyzer(Analyzer delegate, int maxTokenCount)
+}
+
+class TokenStream <<Lucene>> {
+    +void reset()
+    +boolean incrementToken()
+    +CharTermAttribute addAttribute(Class)
+}
+
+class CharTermAttribute <<Lucene>> {
+    +String toString()
+}
+
+class Directory <<Lucene>> {
+    +String[] listAll()
+}
+
+class FSDirectory <<Lucene>> {
+    +{static} FSDirectory open(Path path)
+    +String[] listAll()
+    +void close()
+}
+
+class IndexWriterConfig <<Lucene>> {
+    +IndexWriterConfig(Analyzer analyzer)
+}
+
+class TopFieldDocs <<Lucene>> {
+    +ScoreDoc[] scoreDocs
+    +TotalHits totalHits
+}
+
+class ScoreDoc <<Lucene>> {
+    +int doc
+    +float score
+}
+
+class Sort <<Lucene>> {
+    +Sort(SortField field)
+}
+
+class SortField <<Lucene>> {
+    +SortField(String field, Type type, boolean reverse)
+}
+
+class BytesRef <<Lucene>> {
+    +BytesRef(String text)
+}
+
+class ReadWriteLock <<Java>> {
+    +Lock readLock()
+    +Lock writeLock()
+}
+
+class ReentrantReadWriteLock <<Java>> {
+    +ReentrantReadWriteLock()
+    +Lock readLock()
+    +Lock writeLock()
+}
+
+class File <<Java>> {
+    +boolean exists()
+    +boolean createNewFile()
+    +boolean delete()
+}
+
+class Path <<Java>> {
+    +{static} Path of(String path)
+}
+
+class Files <<Java>> {
+    +{static} void delete(Path path)
+}
+
+' ====================================
+' RELATIONSHIPS - INHERITANCE
+' ====================================
+
+IndexManager <|.. LuceneIndexManager : implements
+Runnable <|.. IndexOperation : implements
+
+IndexOperation <|-- ReadFromIndexOperation : extends
+IndexOperation <|-- WriteToIndexOperation : extends
+
+ReadFromIndexOperation <|-- SearchOperation : extends
+
+WriteToIndexOperation <|-- AddEntryOperation : extends
+WriteToIndexOperation <|-- ReIndexEntryOperation : extends
+WriteToIndexOperation <|-- RemoveEntryOperation : extends
+WriteToIndexOperation <|-- RebuildWebsiteIndexOperation : extends
+WriteToIndexOperation <|-- RemoveWebsiteIndexOperation : extends
+
+ReadWriteLock <|.. ReentrantReadWriteLock : implements
+Directory <|-- FSDirectory : extends
+IndexReader <|-- DirectoryReader : extends
+Query <|-- TermQuery : extends
+Query <|-- BooleanQuery : extends
+Analyzer <|-- StandardAnalyzer : extends
+Analyzer <|-- LimitTokenCountAnalyzer : extends
+Field <|-- StringField : extends
+Field <|-- TextField : extends
+Field <|-- SortedDocValuesField : extends
+
+' ====================================
+' RELATIONSHIPS - COMPOSITION
+' ====================================
+
+LuceneIndexManager *-- "1" ReadWriteLock : rwl
+LuceneIndexManager *-- "1" File : indexConsistencyMarker
+IndexOperation *-- "1" LuceneIndexManager : manager
+
+' ====================================
+' RELATIONSHIPS - AGGREGATION
+' ====================================
+
+LuceneIndexManager o-- "0..1" IndexReader : reader
+LuceneIndexManager o-- "1" Weblogger : roller
+IndexOperation o-- "0..1" IndexWriter : writer
+
+AddEntryOperation o-- "1" WeblogEntry : data
+AddEntryOperation o-- "1" Weblogger : roller
+
+ReIndexEntryOperation o-- "1" WeblogEntry : data
+ReIndexEntryOperation o-- "1" Weblogger : roller
+
+RemoveEntryOperation o-- "1" WeblogEntry : data
+RemoveEntryOperation o-- "1" Weblogger : roller
+
+RebuildWebsiteIndexOperation o-- "0..1" Weblog : website
+RebuildWebsiteIndexOperation o-- "1" Weblogger : roller
+
+RemoveWebsiteIndexOperation o-- "1" Weblog : website
+RemoveWebsiteIndexOperation o-- "1" Weblogger : roller
+
+SearchOperation o-- "0..1" IndexSearcher : searcher
+SearchOperation o-- "0..1" TopFieldDocs : searchresults
+
+' ====================================
+' RELATIONSHIPS - ASSOCIATIONS
+' ====================================
+
+WeblogEntry "1" --> "1" Weblog : website
+WeblogEntry "1" --> "0..1" User : creator
+WeblogEntry "1" --> "0..1" WeblogCategory : category
+WeblogEntry "1" --> "0..*" WeblogEntryComment : comments
+
+Weblogger "1" --> "1" WeblogEntryManager : manages
+Weblogger "1" --> "1" WeblogManager : manages
+Weblogger "1" --> "1" ThreadManager : manages
+
+TopFieldDocs "1" --> "0..*" ScoreDoc : scoreDocs
+
+' ====================================
+' RELATIONSHIPS - DEPENDENCIES
+' ====================================
+
+LuceneIndexManager ..> IndexOperation : creates/schedules
+LuceneIndexManager ..> AddEntryOperation : creates
+LuceneIndexManager ..> ReIndexEntryOperation : creates
+LuceneIndexManager ..> RemoveEntryOperation : creates
+LuceneIndexManager ..> RebuildWebsiteIndexOperation : creates
+LuceneIndexManager ..> RemoveWebsiteIndexOperation : creates
+LuceneIndexManager ..> SearchOperation : creates
+LuceneIndexManager ..> Directory : uses
+LuceneIndexManager ..> FSDirectory : uses
+LuceneIndexManager ..> DirectoryReader : uses
+LuceneIndexManager ..> IndexWriter : uses
+LuceneIndexManager ..> IndexWriterConfig : uses
+LuceneIndexManager ..> Analyzer : uses
+LuceneIndexManager ..> StandardAnalyzer : uses
+LuceneIndexManager ..> LimitTokenCountAnalyzer : uses
+LuceneIndexManager ..> WebloggerConfig : uses
+LuceneIndexManager ..> WebloggerRuntimeConfig : uses
+LuceneIndexManager ..> SearchResultList : creates
+LuceneIndexManager ..> WeblogEntryWrapper : uses
+LuceneIndexManager ..> URLStrategy : uses
+LuceneIndexManager ..> WebloggerException : throws
+LuceneIndexManager ..> InitializationException : throws
+LuceneIndexManager ..> Path : uses
+LuceneIndexManager ..> Files : uses
+
+IndexOperation ..> Document : creates
+IndexOperation ..> Field : uses
+IndexOperation ..> StringField : uses
+IndexOperation ..> TextField : uses
+IndexOperation ..> SortedDocValuesField : uses
+IndexOperation ..> IndexWriter : uses
+IndexOperation ..> IndexWriterConfig : uses
+IndexOperation ..> Analyzer : uses
+IndexOperation ..> LimitTokenCountAnalyzer : uses
+IndexOperation ..> WeblogEntry : processes
+IndexOperation ..> WeblogEntryComment : processes
+IndexOperation ..> WeblogCategory : processes
+IndexOperation ..> User : processes
+IndexOperation ..> Weblog : processes
+IndexOperation ..> WebloggerConfig : uses
+IndexOperation ..> FieldConstants : uses
+IndexOperation ..> BytesRef : uses
+IndexOperation ..> Directory : uses
+
+ReadFromIndexOperation ..> LuceneIndexManager : uses
+ReadFromIndexOperation ..> ReadWriteLock : uses
+
+WriteToIndexOperation ..> LuceneIndexManager : uses
+WriteToIndexOperation ..> ReadWriteLock : uses
+
+AddEntryOperation ..> IndexWriter : uses
+AddEntryOperation ..> Document : uses
+AddEntryOperation ..> WeblogEntryManager : uses
+AddEntryOperation ..> WebloggerException : catches
+
+ReIndexEntryOperation ..> IndexWriter : uses
+ReIndexEntryOperation ..> Document : uses
+ReIndexEntryOperation ..> Term : uses
+ReIndexEntryOperation ..> WeblogEntryManager : uses
+ReIndexEntryOperation ..> WebloggerException : catches
+ReIndexEntryOperation ..> FieldConstants : uses
+
+RemoveEntryOperation ..> IndexWriter : uses
+RemoveEntryOperation ..> Term : uses
+RemoveEntryOperation ..> WeblogEntryManager : uses
+RemoveEntryOperation ..> WebloggerException : catches
+RemoveEntryOperation ..> FieldConstants : uses
+
+RebuildWebsiteIndexOperation ..> IndexWriter : uses
+RebuildWebsiteIndexOperation ..> Term : uses
+RebuildWebsiteIndexOperation ..> Document : uses
+RebuildWebsiteIndexOperation ..> WeblogEntryManager : uses
+RebuildWebsiteIndexOperation ..> WeblogManager : uses
+RebuildWebsiteIndexOperation ..> WeblogEntrySearchCriteria : uses
+RebuildWebsiteIndexOperation ..> WebloggerException : catches
+RebuildWebsiteIndexOperation ..> FieldConstants : uses
+RebuildWebsiteIndexOperation ..> IndexUtil : uses
+RebuildWebsiteIndexOperation ..> PubStatus : uses
+RebuildWebsiteIndexOperation ..> RollerConstants : uses
+
+RemoveWebsiteIndexOperation ..> IndexWriter : uses
+RemoveWebsiteIndexOperation ..> Term : uses
+RemoveWebsiteIndexOperation ..> WeblogManager : uses
+RemoveWebsiteIndexOperation ..> WebloggerException : catches
+RemoveWebsiteIndexOperation ..> FieldConstants : uses
+RemoveWebsiteIndexOperation ..> IndexUtil : uses
+
+SearchOperation ..> IndexReader : uses
+SearchOperation ..> IndexSearcher : uses
+SearchOperation ..> MultiFieldQueryParser : uses
+SearchOperation ..> Query : uses
+SearchOperation ..> TermQuery : uses
+SearchOperation ..> BooleanQuery : uses
+SearchOperation ..> BooleanQueryBuilder : uses
+SearchOperation ..> Term : uses
+SearchOperation ..> TopFieldDocs : uses
+SearchOperation ..> Sort : uses
+SearchOperation ..> SortField : uses
+SearchOperation ..> Analyzer : uses
+SearchOperation ..> FieldConstants : uses
+SearchOperation ..> IndexUtil : uses
+SearchOperation ..> IndexManager : uses
+
+IndexUtil ..> Term : creates
+IndexUtil ..> Analyzer : uses
+IndexUtil ..> TokenStream : uses
+IndexUtil ..> CharTermAttribute : uses
+
+' ====================================
+' NOTES
+' ====================================
+
+note right of LuceneIndexManager
+  Singleton - Central coordinator for all
+  Lucene indexing and search operations.
+  Manages index lifecycle, consistency,
+  and thread-safe access.
+end note
+
+note right of IndexOperation
+  Template Method Pattern:
+  - getDocument() is common logic
+  - doRun() is extension point
+  - run() orchestrates execution
+end note
+
+note right of ReadFromIndexOperation
+  Acquires READ lock before execution.
+  Allows concurrent read operations.
+  Never modifies index.
+end note
+
+note right of WriteToIndexOperation
+  Acquires WRITE lock before execution.
+  Ensures exclusive access during writes.
+  Resets shared reader after completion.
+end note
+
+note right of FieldConstants
+  Centralized field name constants.
+  Prevents magic strings.
+  Single source of truth.
+end note
+
+note bottom of SearchOperation
+  Searches across CONTENT, TITLE, C_CONTENT fields.
+  Supports filtering by weblog, category, locale.
+  Results sorted by PUBLISHED date (descending).
+  Limited to 500 documents.
+end note
+
+@enduml

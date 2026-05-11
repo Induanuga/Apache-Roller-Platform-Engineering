@@ -1,0 +1,112 @@
+[2026-02-12 04:21:56] [INFO] 
+================================================================================
+   AUTOMATED REFACTORING PIPELINE - TASK 3C
+================================================================================
+   Repository: https://github.com/serc-courses/project-1-team-13.git
+   LLM: Gemini models/gemini-2.5-flash
+   Timestamp: 2026-02-12 04:21:56
+   
+   Pipeline Configuration:
+   - Detection: ENABLED
+   - Refactoring: ENABLED
+   - PR Creation: ENABLED
+   - Max Smells to Refactor: 5
+   - Max Files to Analyze: 10
+================================================================================
+
+[2026-02-12 04:21:56] [INFO] 
+================================================================================
+[2026-02-12 04:21:56] [INFO] PHASE 1: REPOSITORY SETUP
+[2026-02-12 04:21:56] [INFO] ================================================================================
+[2026-02-12 04:21:56] [INFO] Repository exists, pulling latest changes
+[2026-02-12 04:21:57] [SUCCESS] Repository ready
+[2026-02-12 04:21:57] [SUCCESS] ✓ Repository ready
+[2026-02-12 04:21:57] [INFO] 
+================================================================================
+[2026-02-12 04:21:57] [INFO] PHASE 2: DESIGN SMELL DETECTION
+[2026-02-12 04:21:57] [INFO] ================================================================================
+[2026-02-12 04:21:57] [INFO] Scanning repository: ./project-1-team-13
+[2026-02-12 04:21:57] [INFO] Found 1099 Java files
+[2026-02-12 04:21:57] [INFO] 
+[1/10] Analyzing: RollerException.java
+[2026-02-12 04:21:57] [INFO] Analyzing file: RollerException.java
+[2026-02-12 04:22:11] [INFO]   Detected 3 smells
+[2026-02-12 04:22:11] [INFO] 
+[2/10] Analyzing: ISO8601DateParser.java
+[2026-02-12 04:22:11] [INFO] Analyzing file: ISO8601DateParser.java
+[2026-02-12 04:22:25] [INFO]   Detected 1 smells
+[2026-02-12 04:22:25] [INFO] 
+[3/10] Analyzing: RollerConstants.java
+[2026-02-12 04:22:25] [INFO] Analyzing file: RollerConstants.java
+[2026-02-12 04:22:37] [INFO]   Detected 1 smells
+[2026-02-12 04:22:37] [INFO] 
+[4/10] Analyzing: PropertyExpander.java
+[2026-02-12 04:22:37] [INFO] Analyzing file: PropertyExpander.java
+[2026-02-12 04:22:47] [INFO]   Detected 1 smells
+[2026-02-12 04:22:47] [INFO] 
+[5/10] Analyzing: UUIDGenerator.java
+[2026-02-12 04:22:47] [INFO] Analyzing file: UUIDGenerator.java
+[2026-02-12 04:22:56] [INFO]   Detected 0 smells
+[2026-02-12 04:22:56] [INFO] 
+[6/10] Analyzing: DateUtil.java
+[2026-02-12 04:22:56] [INFO] Analyzing file: DateUtil.java
+[2026-02-12 04:22:56] [INFO]   Large file detected - using chunking strategy
+[2026-02-12 04:22:56] [INFO]   Analyzing chunk 1/2 (lines 1-500)
+[2026-02-12 04:23:15] [INFO]   Analyzing chunk 2/2 (lines 451-571)
+[2026-02-12 04:23:31] [INFO]   Detected 9 smells
+[2026-02-12 04:23:31] [INFO] 
+[7/10] Analyzing: RegexUtil.java
+[2026-02-12 04:23:31] [INFO] Analyzing file: RegexUtil.java
+[2026-02-12 04:23:41] [INFO]   Detected 1 smells
+[2026-02-12 04:23:41] [INFO] 
+[8/10] Analyzing: Category.java
+[2026-02-12 04:23:41] [INFO] Analyzing file: Category.java
+[2026-02-12 04:23:47] [INFO]   Detected 1 smells
+[2026-02-12 04:23:47] [INFO] 
+[9/10] Analyzing: Subscription.java
+[2026-02-12 04:23:47] [INFO] Analyzing file: Subscription.java
+[2026-02-12 04:23:57] [INFO]   Detected 1 smells
+[2026-02-12 04:23:57] [INFO] 
+[10/10] Analyzing: Planet.java
+[2026-02-12 04:23:57] [INFO] Analyzing file: Planet.java
+[2026-02-12 04:24:07] [INFO]   Detected 1 smells
+[2026-02-12 04:24:07] [SUCCESS] Smell report saved: ./results/smell_detection_report.json
+[2026-02-12 04:24:07] [SUCCESS] 
+✓ Detection complete: 19 smells found
+[2026-02-12 04:24:07] [INFO] 
+================================================================================
+[2026-02-12 04:24:07] [INFO] PHASE 3: CODE REFACTORING
+[2026-02-12 04:24:07] [INFO] ================================================================================
+[2026-02-12 04:24:07] [INFO] Refactoring top 5 smells
+[2026-02-12 04:24:07] [INFO] 
+[1/5] Refactoring smell: f8d9cb80d192
+[2026-02-12 04:24:07] [INFO]   Type: God Class
+[2026-02-12 04:24:07] [INFO]   File: DateUtil.java
+[2026-02-12 04:24:07] [INFO]   Severity: CRITICAL
+[2026-02-12 04:24:07] [INFO] Creating refactoring plan for smell: f8d9cb80d192
+[2026-02-12 04:24:21] [INFO]   Strategy: Extract Class
+[2026-02-12 04:24:21] [INFO] Generating refactored code for smell: f8d9cb80d192
+[2026-02-12 04:24:46] [ERROR] Failed to generate refactored code: Unterminated string starting at: line 5 column 18 (char 139)
+[2026-02-12 04:24:46] [ERROR]   ✗ Refactoring failed: Unterminated string starting at: line 5 column 18 (char 139)
+[2026-02-12 04:24:46] [INFO] 
+[2/5] Refactoring smell: f76fa9d8a848
+[2026-02-12 04:24:46] [INFO]   Type: Duplicate Code
+[2026-02-12 04:24:46] [INFO]   File: RollerException.java
+[2026-02-12 04:24:46] [INFO]   Severity: HIGH
+[2026-02-12 04:24:46] [INFO] Creating refactoring plan for smell: f76fa9d8a848
+[2026-02-12 04:25:05] [ERROR] Failed to create refactoring plan: Unterminated string starting at: line 3 column 18 (char 51)
+[2026-02-12 04:25:05] [INFO]   Strategy: Extract Method
+[2026-02-12 04:25:05] [INFO] Generating refactored code for smell: f76fa9d8a848
+[2026-02-12 04:25:27] [ERROR] Failed to generate refactored code: Invalid control character at: line 5 column 21 (char 144)
+[2026-02-12 04:25:27] [ERROR]   ✗ Refactoring failed: Invalid control character at: line 5 column 21 (char 144)
+[2026-02-12 04:25:27] [INFO] 
+[3/5] Refactoring smell: 79be3ba47ff9
+[2026-02-12 04:25:27] [INFO]   Type: God Class
+[2026-02-12 04:25:27] [INFO]   File: RollerConstants.java
+[2026-02-12 04:25:27] [INFO]   Severity: HIGH
+[2026-02-12 04:25:27] [INFO] Creating refactoring plan for smell: 79be3ba47ff9
+[2026-02-12 04:25:46] [ERROR] Failed to create refactoring plan: Unterminated string starting at: line 20 column 5 (char 3737)
+[2026-02-12 04:25:46] [INFO]   Strategy: Extract Method
+[2026-02-12 04:25:46] [INFO] Generating refactored code for smell: 79be3ba47ff9
+[2026-02-12 04:26:07] [WARNING] 
+Pipeline interrupted by user

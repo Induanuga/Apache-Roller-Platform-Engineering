@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+    <package>org.apache.roller.weblogger.pojos</package>
+    <entity metadata-complete="true" name="UserWeblogEntryStar"
+            class="org.apache.roller.weblogger.pojos.UserWeblogEntryStar" access="PROPERTY">
+        <table name="user_weblogentry_star"/>
+        <named-query name="UserWeblogEntryStar.getByUser">
+            <query>SELECT s FROM UserWeblogEntryStar s WHERE s.user = ?1</query>
+        </named-query>
+        <named-query name="UserWeblogEntryStar.getByUserAndWeblogEntry">
+            <query>SELECT s FROM UserWeblogEntryStar s WHERE s.user = ?1 AND s.weblogEntry = ?2</query>
+        </named-query>
+        <named-query name="UserWeblogEntryStar.getCountByWeblogEntry">
+            <query>SELECT COUNT(s) FROM UserWeblogEntryStar s WHERE s.weblogEntry = ?1</query>
+        </named-query>
+        <named-query name="UserWeblogEntryStar.getTopByStarCount">
+            <query>SELECT s.weblogEntry, COUNT(s) AS cnt FROM UserWeblogEntryStar s GROUP BY s.weblogEntry ORDER BY cnt DESC</query>
+        </named-query>
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <many-to-one name="user" target-entity="org.apache.roller.weblogger.pojos.User">
+                <join-column name="userid" insertable="true" updatable="true" nullable="false"/>
+            </many-to-one>
+            <many-to-one name="weblogEntry" target-entity="org.apache.roller.weblogger.pojos.WeblogEntry">
+                <join-column name="weblogentryid" insertable="true" updatable="true" nullable="false"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+</entity-mappings>

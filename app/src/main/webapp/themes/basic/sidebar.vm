@@ -1,0 +1,33 @@
+## sidebar contents
+    <!-- sidebar -->
+    <h2>Star this Blog</h2>
+    <div class="sidebar">
+        <a href="${url.absoluteSite}/roller-ui/star!weblog.rol?id=$model.weblog.id" onclick="return starItem(this, 'star-count-blog-$model.weblog.id')">⭐ Star this Blog</a> [<span id="star-count-blog-$model.weblog.id">$model.weblog.starCount</span>]
+    </div>
+
+    <h2>Calendar</h2>
+    <div class="sidebar">
+    #showWeblogEntryCalendar($model.weblog "nil")
+    </div>
+
+    <h2>Feeds</h2>
+    <div class="sidebar">
+    #showAtomFeedsList($model.weblog)
+    </div>
+
+    <h2>Search</h2>
+    <div class="sidebar">
+    #showWeblogSearchForm($model.weblog false)
+    </div>
+
+    <h2>Links</h2>
+    <div class="sidebar">
+    #set($defaultFolder = $model.weblog.getBookmarkFolder("/"))
+    #showBookmarkLinksList($defaultFolder)
+    </div>
+
+    <h2>Navigation</h2>
+    <div class="sidebar">
+    #showPageMenu($model.weblog)
+    #showAuthorMenu(true)
+    </div>
